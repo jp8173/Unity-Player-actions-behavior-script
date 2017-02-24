@@ -1,0 +1,30 @@
+usingUnityEngine;
+usingSystem.Collections;
+
+publicclassWasdCont : MonoBehaviour {
+//Variables
+publicfloatspeed = 6.0F;
+publicfloatjumpSpeed = 8.0F; 
+publicfloatgravity = 20.0F;
+privateVector3moveDirection = Vector3.zero;
+
+voidUpdate() {
+CharacterControllercontroller = GetComponent<CharacterController>();
+//isthecontrollerontheground?
+if (controller.isGrounded) {
+//FeedmoveDirectionwithinput.
+moveDirection = newVector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+moveDirection = transform.TransformDirection(moveDirection);
+//Multiplyitbyspeed.
+moveDirection *= speed;
+//Jumping
+if (Input.GetButton("Jump"))
+moveDirection.y = jumpSpeed;
+
+}
+//Applyinggravitytothecontroller
+moveDirection.y -= gravity * Time.deltaTime;
+//Makingthecharactermove
+controller.Move(moveDirection * Time.deltaTime);
+}
+}
