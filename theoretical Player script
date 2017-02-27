@@ -1,0 +1,79 @@
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
+public class PlayerController : MonoBehaviour {
+//variables
+    public float speed;
+    public Text countText;
+    public Text winText;
+
+    private Rigidbody rb;
+    private int count;
+//beginning of script/ starting game
+    void Start ()
+    {
+        rb = GetComponent<Rigidbody>();
+        count = 0;
+        SetCountText ();
+        winText.text = "";
+    }
+//movement
+    void FixedUpdate ()
+    {
+        float moveHorizontal = Input.GetAxis ("Horizontal");
+        float moveVertical = Input.GetAxis ("Vertical");
+
+        Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
+
+        rb.AddForce (movement * speed);
+    }
+//collecting prisms
+    void OnTriggerEnter(Collider other) 
+    {
+        if (other.gameObject.CompareTag ( "Pick Up"))
+        {
+            other.gameObject.SetActive (false);
+            count = count + 1;
+            SetCountText ();
+        }
+    }
+//ui control
+    void SetCountText ()
+    {
+        countText.text = "Count: " + count.ToString ();
+        if (count >= 12)
+        {
+            winText.text = "You Win!"; //potentially replaceable by button|add show button script?
+        }
+    }
+}
+
+
+publicclassWasdCont : MonoBehaviour {
+//Variables
+publicfloatspeed = 6.0F;
+publicfloatjumpSpeed = 8.0F; 
+publicfloatgravity = 20.0F;
+privateVector3moveDirection = Vector3.zero;
+
+voidUpdate() {
+CharacterControllercontroller = GetComponent<CharacterController>();
+//isthecontrollerontheground?
+if (controller.isGrounded) {
+//FeedmoveDirectionwithinput.
+moveDirection = newVector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+moveDirection = transform.TransformDirection(moveDirection);
+//Multiplyitbyspeed.
+moveDirection *= speed;
+//Jumping
+if (Input.GetButton("Jump"))
+moveDirection.y = jumpSpeed;
+
+}
+//Applyinggravitytothecontroller
+moveDirection.y -= gravity * Time.deltaTime;
+//Makingthecharactermove
+controller.Move(moveDirection * Time.deltaTime);
+}
+}
