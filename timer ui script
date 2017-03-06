@@ -1,0 +1,53 @@
+ public GUIText myTxt;
+ 
+     int hh=0,
+     mm=0,
+     ss=0;
+ 
+     void Start()
+     {
+         StartTimer ();
+     }
+     //Call this function to Start Timer
+     public void StartTimer()
+     {
+         StartCoroutine (MyTimer());
+     }
+ 
+     //Call this function to Stop Timer
+     public void StopTimer()
+     {
+         StopCoroutine ("MyTimer");
+     }
+ 
+     //Timer Logic
+     IEnumerator MyTimer ()
+     {
+         for(;;)
+         {
+             myTxt.text = FormatTimer(hh)+" : "+FormatTimer(mm)+" : "+FormatTimer(ss);
+ 
+             yield return new WaitForSeconds(1);
+             ss+=1;
+ 
+             if(ss>59)
+             {
+                 ss=0;
+                 mm+=1;
+             }
+             if(mm>59)
+             {
+                 mm=0;
+                 hh+=1;
+             }
+         }
+     }
+ 
+     //Format Timer
+     string FormatTimer (int p)
+     {
+         if (p <= 9)
+                 return "0" + p.ToString ();
+         else
+                 return p.ToString();
+     }
